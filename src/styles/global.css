@@ -1,0 +1,603 @@
+/* ---------- Fonts ----------
+   Self-hosted variable fonts (latin subset), so the page makes no third-party
+   requests. Sources and licences: /fonts/README.txt */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/inter-latin-var.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-latin-var.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/newsreader-600-latin-opsz.woff2') format('woff2');
+}
+
+/* ---------- Design tokens ---------- */
+:root {
+  color-scheme: light;
+
+  --bg: hsl(40, 33%, 97%);
+  --bg-elevated: hsl(42, 50%, 99.3%);
+  --bg-hover: hsl(40, 36%, 96.2%);
+  --ink: hsl(220, 22%, 12%);
+  --ink-secondary: hsl(220, 12%, 30%);
+  --ink-muted: hsl(220, 9%, 40%);
+  --border: hsl(36, 18%, 86%);
+  --border-strong: hsl(35, 14%, 66%);
+  --accent: hsl(15, 68%, 38%);
+  --merged: hsl(174, 82%, 21%);
+  --merged-bg: hsl(170, 36%, 90%);
+  --shadow-sm: 0 1px 2px hsla(30, 25%, 18%, 0.05);
+  --shadow-md: 0 2px 4px hsla(30, 25%, 18%, 0.04), 0 14px 28px -16px hsla(30, 25%, 18%, 0.24);
+
+  --font-serif: 'Newsreader', Georgia, Cambria, 'Times New Roman', serif;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --max-col: 44rem;
+  --gutter: clamp(1.15rem, 4.5vw, 1.5rem);
+  --radius: 12px;
+}
+
+/* Dark theme. Declared twice on purpose: once for visitors whose system is dark
+   (and who have not chosen light), once for an explicit choice via the toggle. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+
+    --bg: hsl(220, 15%, 9%);
+    --bg-elevated: hsl(220, 14%, 12.5%);
+    --bg-hover: hsl(220, 13%, 15.5%);
+    --ink: hsl(38, 24%, 92%);
+    --ink-secondary: hsl(38, 12%, 76%);
+    --ink-muted: hsl(220, 10%, 64%);
+    --border: hsl(220, 12%, 21%);
+    --border-strong: hsl(220, 11%, 38%);
+    --accent: hsl(18, 82%, 66%);
+    --merged: hsl(168, 58%, 64%);
+    --merged-bg: hsl(172, 38%, 16%);
+    --shadow-sm: none;
+    --shadow-md: 0 14px 28px -16px hsla(0, 0%, 0%, 0.7);
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg: hsl(220, 15%, 9%);
+  --bg-elevated: hsl(220, 14%, 12.5%);
+  --bg-hover: hsl(220, 13%, 15.5%);
+  --ink: hsl(38, 24%, 92%);
+  --ink-secondary: hsl(38, 12%, 76%);
+  --ink-muted: hsl(220, 10%, 64%);
+  --border: hsl(220, 12%, 21%);
+  --border-strong: hsl(220, 11%, 38%);
+  --accent: hsl(18, 82%, 66%);
+  --merged: hsl(168, 58%, 64%);
+  --merged-bg: hsl(172, 38%, 16%);
+  --shadow-sm: none;
+  --shadow-md: 0 14px 28px -16px hsla(0, 0%, 0%, 0.7);
+}
+
+/* ---------- Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 100%;
+  line-height: 1.6;
+  /* Keeps keyboard focus and in-page jumps clear of the sticky header. */
+  scroll-padding-top: 4.75rem;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+main {
+  flex: 1;
+}
+
+a {
+  color: inherit;
+  text-decoration-color: var(--border-strong);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+
+a:hover {
+  color: var(--accent);
+  text-decoration-color: currentColor;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.icon {
+  flex: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -5rem;
+  left: var(--gutter);
+  z-index: 100;
+  padding: 0.6rem 0.95rem;
+  border-radius: 8px;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 0.6rem;
+  color: var(--bg);
+}
+
+/* ---------- Header ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  background: color-mix(in srgb, var(--bg) 86%, transparent);
+  -webkit-backdrop-filter: saturate(1.5) blur(12px);
+  backdrop-filter: saturate(1.5) blur(12px);
+}
+
+.site-header-inner {
+  max-width: var(--max-col);
+  min-height: 3.5rem;
+  margin: 0 auto;
+  padding: 0.35rem var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  font-family: var(--font-serif);
+  font-size: 1.14rem;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  white-space: nowrap;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.brand:hover {
+  color: var(--ink);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  margin-right: -0.55rem;
+}
+
+.nav-links a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 0.6rem;
+  border-radius: 8px;
+  font-size: 0.93rem;
+  font-weight: 500;
+  color: var(--ink-secondary);
+  text-decoration: none;
+}
+
+.nav-links a:hover {
+  color: var(--ink);
+}
+
+.nav-links a[aria-current='page'] {
+  color: var(--ink);
+}
+
+.nav-links a[aria-current='page']::after {
+  content: '';
+  position: absolute;
+  right: 0.6rem;
+  bottom: 0.5rem;
+  left: 0.6rem;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--ink);
+}
+
+/* The toggle needs JavaScript, so it only appears once theme.js has run. */
+.theme-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink-secondary);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.js .theme-btn {
+  display: inline-flex;
+}
+
+.theme-btn:hover {
+  background: var(--bg-hover);
+  color: var(--ink);
+}
+
+.icon-sun {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .icon-sun {
+    display: block;
+  }
+
+  :root:not([data-theme='light']) .icon-moon {
+    display: none;
+  }
+}
+
+:root[data-theme='dark'] .icon-sun {
+  display: block;
+}
+
+:root[data-theme='dark'] .icon-moon {
+  display: none;
+}
+
+@media (max-width: 340px) {
+  .nav-links a {
+    padding: 0 0.4rem;
+  }
+
+  .nav-links a[aria-current='page']::after {
+    right: 0.4rem;
+    left: 0.4rem;
+  }
+}
+
+/* ---------- Page scaffolding ---------- */
+.page {
+  width: 100%;
+  max-width: var(--max-col);
+  margin: 0 auto;
+  padding: clamp(2.25rem, 7vw, 3.75rem) var(--gutter) clamp(3rem, 9vw, 5rem);
+}
+
+.page-title {
+  margin: 0 0 0.6rem;
+  font-family: var(--font-serif);
+  font-size: clamp(2.1rem, 6.4vw, 2.9rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+}
+
+.page-lede {
+  max-width: 34rem;
+  margin: 0;
+  font-size: clamp(1rem, 2.8vw, 1.08rem);
+  line-height: 1.55;
+  color: var(--ink-secondary);
+  text-wrap: pretty;
+}
+
+.section {
+  margin-top: clamp(2.4rem, 7vw, 3.25rem);
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.section-title {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.section-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: 2.75rem;
+  margin: -0.4rem 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--ink-secondary);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.section-link .icon {
+  transition: transform 0.15s ease;
+}
+
+.section-link:hover .icon {
+  transform: translateX(2px);
+}
+
+/* ---------- Rows: merged pull requests and repositories ---------- */
+.row-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-sm);
+}
+
+.row {
+  position: relative;
+  padding: 1.1rem 1.35rem 1.15rem;
+  transition: background-color 0.15s ease;
+}
+
+.row + .row {
+  border-top: 1px solid var(--border);
+}
+
+.row:first-child {
+  border-radius: calc(var(--radius) - 1px) calc(var(--radius) - 1px) 0 0;
+}
+
+.row:last-child {
+  border-radius: 0 0 calc(var(--radius) - 1px) calc(var(--radius) - 1px);
+}
+
+.row:only-child {
+  border-radius: calc(var(--radius) - 1px);
+}
+
+.row:hover {
+  background: var(--bg-hover);
+}
+
+.row-kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem 0.85rem;
+  margin: 0 0 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+
+.row-title {
+  margin: 0 0 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: -0.012em;
+  overflow-wrap: break-word;
+}
+
+.row-title a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+/* Stretch the title link over the whole row so the row is one large target. */
+.row-title a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.row-title a:focus-visible {
+  outline: none;
+}
+
+.row-title a:focus-visible::after {
+  outline: 2px solid var(--ink);
+  outline-offset: -3px;
+  border-radius: 9px;
+}
+
+.row-owner,
+.row-number {
+  font-weight: 500;
+  color: var(--ink-muted);
+}
+
+/* "repo #123 ↗" moves to the next line as one unit when the full name is too
+   wide, instead of leaving the number or the arrow stranded. */
+.row-tail {
+  display: inline-block;
+}
+
+.row-arrow {
+  vertical-align: -0.1em;
+  color: var(--ink-muted);
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.row:hover .row-title a,
+.row:hover .row-owner,
+.row:hover .row-number,
+.row:hover .row-arrow {
+  color: var(--accent);
+}
+
+.row:hover .row-arrow {
+  transform: translate(2px, -2px);
+}
+
+.row-summary {
+  max-width: 38rem;
+  margin: 0;
+  font-size: 0.96rem;
+  line-height: 1.6;
+  color: var(--ink-secondary);
+  text-wrap: pretty;
+}
+
+.badge-merged {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.14rem 0.55rem 0.14rem 0.42rem;
+  border-radius: 999px;
+  background: var(--merged-bg);
+  color: var(--merged);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+@media (max-width: 420px) {
+  .row {
+    padding: 1rem 1.1rem 1.05rem;
+  }
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  border-top: 1px solid var(--border);
+  font-size: 0.86rem;
+  color: var(--ink-muted);
+}
+
+.site-footer-inner {
+  max-width: var(--max-col);
+  margin: 0 auto;
+  padding: 1.1rem var(--gutter) 1.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.25rem;
+  margin: 0 -0.6rem 0 -0.6rem;
+  padding: 0;
+  list-style: none;
+}
+
+.footer-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 0.6rem;
+  color: var(--ink-secondary);
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: var(--accent);
+}
+
+/* ---------- Motion ---------- */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    animation: rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .reveal-2 {
+    animation-delay: 70ms;
+  }
+
+  .reveal-3 {
+    animation-delay: 140ms;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

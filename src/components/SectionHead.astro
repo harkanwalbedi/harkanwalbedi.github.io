@@ -1,0 +1,31 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  /** id of the heading, referenced by the section's aria-labelledby. */
+  id: string;
+  title: string;
+  href?: string;
+  linkText?: string;
+  linkId?: string;
+  external?: boolean;
+}
+
+const { id, title, href, linkText, linkId, external = false } = Astro.props;
+---
+<div class="section-head">
+  <h2 id={id} class="section-title">{title}</h2>
+  {href && linkText && (
+    <a
+      class="section-link"
+      href={href}
+      id={linkId}
+      target={external ? '_blank' : undefined}
+      rel={external ? 'noopener' : undefined}
+      aria-describedby={external ? 'hint-new-tab' : undefined}
+    >
+      {linkText}
+      <Icon name={external ? 'external' : 'arrow-right'} size={14} />
+    </a>
+  )}
+</div>

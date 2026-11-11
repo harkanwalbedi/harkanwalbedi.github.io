@@ -1,0 +1,127 @@
+---
+import Icon from './Icon.astro';
+import { formatDate, type Post } from '../data/site';
+
+interface Props {
+  post: Post;
+  /** Unique id for the card's link. */
+  id: string;
+}
+
+const { post, id } = Astro.props;
+---
+<article class="post-card">
+  <p class="post-kicker">
+    {post.part && <span>{post.part}</span>}
+    {post.part && <span class="post-kicker-dot" aria-hidden="true">·</span>}
+    <time datetime={post.date}>{formatDate(post.date)}</time>
+  </p>
+  <h3 class="post-title">
+    <a href={post.url} id={id} target="_blank" rel="noopener" aria-describedby="hint-medium">{post.title}</a>
+  </h3>
+  <p class="post-summary">{post.summary}</p>
+  <p class="post-cta" aria-hidden="true">
+    Read on Medium
+    <Icon name="external" size={14} />
+  </p>
+</article>
+
+<style>
+  .post-card {
+    position: relative;
+    padding: 1.25rem 1.35rem 1.15rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-elevated);
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+  }
+
+  .post-card:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .post-kicker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem 0.5rem;
+    margin: 0 0 0.45rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: var(--ink-muted);
+  }
+
+  .post-title {
+    margin: 0 0 0.4rem;
+    font-family: var(--font-serif);
+    font-size: clamp(1.32rem, 4.4vw, 1.55rem);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  .post-title a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  /* Stretch the title link over the whole card so the card is one target. */
+  .post-title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+  }
+
+  .post-title a:focus-visible {
+    outline: none;
+  }
+
+  .post-title a:focus-visible::after {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+  }
+
+  .post-summary {
+    max-width: 36rem;
+    margin: 0 0 0.85rem;
+    font-size: 0.98rem;
+    line-height: 1.6;
+    color: var(--ink-secondary);
+    text-wrap: pretty;
+  }
+
+  .post-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink);
+    transition: color 0.15s ease;
+  }
+
+  .post-cta :global(.icon) {
+    transition: transform 0.15s ease;
+  }
+
+  .post-card:hover .post-title a,
+  .post-card:hover .post-cta {
+    color: var(--accent);
+  }
+
+  .post-card:hover .post-cta :global(.icon) {
+    transform: translate(2px, -2px);
+  }
+
+  @media (max-width: 420px) {
+    .post-card {
+      padding: 1.1rem 1.1rem 1.05rem;
+    }
+  }
+</style>

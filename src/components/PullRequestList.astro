@@ -1,0 +1,41 @@
+---
+import Icon from './Icon.astro';
+import { formatDate, pullRequestUrl, type MergedPullRequest } from '../data/site';
+
+interface Props {
+  items: MergedPullRequest[];
+  /** Prefix that keeps link ids unique when the list appears on several pages. */
+  idPrefix: string;
+}
+
+const { items, idPrefix } = Astro.props;
+
+const slug = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+---
+<ul class="row-list">
+  {items.map((pr) => (
+    <li class="row">
+      <p class="row-kicker">
+        <span class="badge-merged">
+          <Icon name="merge" size={13} />
+          Merged
+        </span>
+        <time datetime={pr.mergedAt}>{formatDate(pr.mergedAt)}</time>
+        <span>{pr.language}</span>
+      </p>
+      <h3 class="row-title">
+        <a
+          href={pullRequestUrl(pr)}
+          id={`${idPrefix}-${slug(pr.repo)}-${pr.number}`}
+          target="_blank"
+          rel="noopener"
+          aria-describedby="hint-github"
+        ><span class="row-owner">{pr.owner}/</span><wbr /><span class="row-tail">{pr.repo} <span class="row-number">#{pr.number}</span>&nbsp;<Icon name="external" size={14} class="row-arrow" /></span></a>
+      </h3>
+      <p class="row-summary">
+        {pr.summary}
+        {pr.release && ` Released in ${pr.release}.`}
+      </p>
+    </li>
+  ))}
+</ul>

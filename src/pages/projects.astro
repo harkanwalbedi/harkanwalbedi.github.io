@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PullRequestList from '../components/PullRequestList.astro';
+import RepositoryList from '../components/RepositoryList.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { mergedPullRequests, profile, repositories } from '../data/site';
+---
+<BaseLayout
+  title={`Projects & Open Source — ${profile.name}`}
+  description={`Merged upstream pull requests and open-source repositories by ${profile.name}: llama.cpp, maxdiffusion, and Vertex AI and Gemini tooling.`}
+>
+  <div class="page">
+    <header class="reveal">
+      <h1 class="page-title">Projects &amp; Open Source</h1>
+      <p class="page-lede">
+        Merged upstream contributions, plus reference architectures and tooling for Vertex AI and Gemini.
+      </p>
+    </header>
+
+    <section class="section reveal reveal-2" aria-labelledby="merged-heading">
+      <SectionHead id="merged-heading" title="Merged pull requests" />
+      <PullRequestList items={mergedPullRequests} idPrefix="pr" />
+    </section>
+
+    <section class="section reveal reveal-3" aria-labelledby="repos-heading">
+      <SectionHead
+        id="repos-heading"
+        title="Repositories"
+        href={`${profile.github}?tab=repositories`}
+        linkText="All on GitHub"
+        linkId="repos-all"
+        external
+      />
+      <RepositoryList items={repositories} />
+    </section>
+  </div>
+</BaseLayout>

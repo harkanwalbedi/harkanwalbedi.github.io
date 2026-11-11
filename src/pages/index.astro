@@ -1,0 +1,137 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import PostCard from '../components/PostCard.astro';
+import PullRequestList from '../components/PullRequestList.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { mergedPullRequests, posts, profile } from '../data/site';
+
+const slug = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+---
+<BaseLayout title={`${profile.name} — ${profile.role}`}>
+  <div class="page">
+    <section class="intro reveal" aria-labelledby="intro-name">
+      <h1 id="intro-name" class="page-title">{profile.name}</h1>
+      <p class="intro-role">
+        {profile.role} @ {profile.company} <span class="intro-sep" aria-hidden="true">·</span> {profile.location}
+      </p>
+      <ul class="intro-links" aria-label="Profiles">
+        <li>
+          <a href={profile.github} id="social-github" target="_blank" rel="noopener me" aria-describedby="hint-new-tab">
+            <Icon name="github" size={17} />
+            GitHub
+          </a>
+        </li>
+        <li>
+          <a href={profile.medium} id="social-medium" target="_blank" rel="noopener me" aria-describedby="hint-new-tab">
+            <Icon name="medium" size={17} />
+            Medium
+          </a>
+        </li>
+        <li>
+          <a href={profile.linkedin} id="social-linkedin" target="_blank" rel="noopener me" aria-describedby="hint-new-tab">
+            <Icon name="linkedin" size={17} />
+            LinkedIn
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <section class="section reveal reveal-2" aria-labelledby="posts-heading">
+      <SectionHead
+        id="posts-heading"
+        title="Posts"
+        href={profile.medium}
+        linkText="All on Medium"
+        linkId="posts-all"
+        external
+      />
+      <ul class="post-list">
+        {posts.map((post) => (
+          <li>
+            <PostCard post={post} id={`post-${slug(post.title)}`} />
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="section reveal reveal-3" aria-labelledby="oss-heading">
+      <SectionHead
+        id="oss-heading"
+        title="Open source"
+        href="/projects/"
+        linkText="All projects"
+        linkId="oss-all"
+      />
+      <PullRequestList items={mergedPullRequests} idPrefix="home-pr" />
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .intro-role {
+    margin: 0 0 1.2rem;
+    font-size: clamp(1rem, 2.9vw, 1.1rem);
+    line-height: 1.5;
+    color: var(--ink-secondary);
+    text-wrap: balance;
+  }
+
+  .intro-sep {
+    margin: 0 0.15rem;
+    color: var(--ink-muted);
+  }
+
+  .intro-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .intro-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0 0.95rem 0 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--bg-elevated);
+    box-shadow: var(--shadow-sm);
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--ink-secondary);
+    text-decoration: none;
+    transition: border-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  }
+
+  .intro-links a:hover {
+    border-color: var(--border-strong);
+    color: var(--ink);
+    transform: translateY(-1px);
+  }
+
+  /* Keep all three profile links on one line on phones. */
+  @media (max-width: 480px) {
+    .intro-links {
+      gap: 0.4rem;
+    }
+
+    .intro-links a {
+      gap: 0.4rem;
+      padding: 0 0.75rem 0 0.62rem;
+      font-size: 0.88rem;
+    }
+  }
+
+  .post-list {
+    display: grid;
+    gap: 0.85rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+</style>

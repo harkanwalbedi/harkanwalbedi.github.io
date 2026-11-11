@@ -1,0 +1,27 @@
+---
+import Icon from './Icon.astro';
+import { repositoryUrl, type Repository } from '../data/site';
+
+interface Props {
+  items: Repository[];
+}
+
+const { items } = Astro.props;
+---
+<ul class="row-list">
+  {items.map((repo) => (
+    <li class="row">
+      <p class="row-kicker">{repo.kind}</p>
+      <h3 class="row-title">
+        <a
+          href={repositoryUrl(repo)}
+          id={`repo-${repo.name}`}
+          target="_blank"
+          rel="noopener"
+          aria-describedby="hint-github"
+        >{repo.name}&nbsp;<Icon name="external" size={14} class="row-arrow" /></a>
+      </h3>
+      <p class="row-summary">{repo.summary}</p>
+    </li>
+  ))}
+</ul>
