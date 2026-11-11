@@ -1,0 +1,36 @@
+{
+  "posts": [
+    {
+      "title": "Inside System 1 Models",
+      "summary": "How a transformer stops writing text and starts providing calibrated decisions .",
+      "date": "2026-10-29",
+      "part": "Part 2 of 4",
+      "url": "https://harkanwalbedi.medium.com/inside-system-1-models-e36c0b30c8a9"
+    },
+    {
+      "title": "Thinking, Fast and Slow for Production Agents",
+      "summary": "Pairing open-weights System 1 decision models with an llm so every model plays to its strengths.",
+      "date": "2026-10-14",
+      "part": "Part 1 of 4",
+      "url": "https://harkanwalbedi.medium.com/thinking-fast-and-slow-for-production-agents-03e5d0f87cc2"
+    }
+  ],
+  "mergedPullRequests": [
+    {
+      "owner": "ggml-org",
+      "repo": "llama.cpp",
+      "number": 30779,
+      "summary": "server: visit parent slots before child slots",
+      "mergedAt": "2026-11-07",
+      "language": "C++"
+    },
+    {
+      "owner": "AI-Hypercomputer",
+      "repo": "maxdiffusion",
+      "number": 476,
+      "summary": "fix(deps): skip nvidia-cuda-cccl on macOS (no wheels available)",
+      "mergedAt": "2026-11-06",
+      "language": "Python"
+    }
+  ]
+}

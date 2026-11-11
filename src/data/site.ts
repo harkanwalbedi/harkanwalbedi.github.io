@@ -1,6 +1,8 @@
 // Single source of truth for everything the site lists.
-// Adding a post, a merged pull request or a repository is one entry here;
-// the pages render from these arrays, so nothing can drift between them.
+// Curated summaries here are merged with src/data/auto_synced.json (generated
+// by scripts/sync.mjs from Medium RSS + GitHub merged PR search).
+
+import synced from './auto_synced.json';
 
 export const profile = {
   name: 'Harkanwal Bedi',
@@ -24,7 +26,7 @@ export interface Post {
 
 // Medium is the only copy of each post. Titles, dates and links mirror what is
 // published there. Newest first.
-export const posts: Post[] = [
+const curatedPosts: Post[] = [
   {
     title: 'Inside System 1 Models',
     summary: 'How a transformer stops writing text and starts providing calibrated decisions.',
@@ -42,6 +44,12 @@ export const posts: Post[] = [
   },
 ];
 
+const curatedByUrl = new Map(curatedPosts.map((p) => [p.url, p]));
+export const posts: Post[] = [
+  ...synced.posts.map((p) => curatedByUrl.get(p.url) ?? p),
+  ...curatedPosts.filter((p) => !synced.posts.some((s) => s.url === p.url)),
+];
+
 export interface MergedPullRequest {
   /** GitHub organisation or user that owns the repository. */
   owner: string;
@@ -55,8 +63,7 @@ export interface MergedPullRequest {
   release?: string;
 }
 
-// Only pull requests that have been merged upstream belong here. Newest first.
-export const mergedPullRequests: MergedPullRequest[] = [
+const curatedPullRequests: MergedPullRequest[] = [
   {
     owner: 'ggml-org',
     repo: 'llama.cpp',
@@ -76,6 +83,16 @@ export const mergedPullRequests: MergedPullRequest[] = [
     mergedAt: '2026-11-06',
     language: 'Python',
   },
+];
+
+const prKey = (p: { owner: string; repo: string; number: number }) =>
+  `${p.owner}/${p.repo}#${p.number}`;
+const curatedByKey = new Map(curatedPullRequests.map((p) => [prKey(p), p]));
+export const mergedPullRequests: MergedPullRequest[] = [
+  ...synced.mergedPullRequests.map((p) => curatedByKey.get(prKey(p)) ?? p),
+  ...curatedPullRequests.filter(
+    (p) => !synced.mergedPullRequests.some((s) => prKey(s) === prKey(p)),
+  ),
 ];
 
 export interface Repository {

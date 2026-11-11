@@ -3,6 +3,8 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: '17 14 * * *'
   workflow_dispatch:
 
 permissions:
@@ -27,6 +29,10 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
+      - name: Sync Medium RSS and merged GitHub PRs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/sync.mjs
       - name: Build with Astro
         run: npm run build
       - name: Upload Pages artifact
