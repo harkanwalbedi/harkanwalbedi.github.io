@@ -1,23 +1,15 @@
-name: Deploy to GitHub Pages
+name: Sync Site with Medium RSS and Merged PRs
 
 on:
-  push:
-    branches: [main]
   schedule:
     - cron: '17 14 * * *'
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  contents: write
 
 jobs:
-  build:
+  sync:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -33,20 +25,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node scripts/sync.mjs
-      - name: Build with Astro
-        run: npm run build
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Rebuild static pages if data changed
+        run: |
+          if [ -n "$(git status --porcelain src/data/auto_synced.json)" ]; then
+            npm run build
+            cp -r dist/* .
+            git config user.name "Harkanwal Bedi"
+            git config user.email "bedi1887@gmail.com"
+            git add src/data/auto_synced.json index.html projects/index.html _astro/
+            git commit -m "chore: auto-sync site with latest posts and merged PRs"
+            git push
+          fi
